@@ -2,6 +2,8 @@ import sys
 
 test = True if len(sys.argv) > 1 and sys.argv[1] == "-t"  else False
 
+part2 = True if (len(sys.argv) > 2 and sys.argv[2] == "2") or (len(sys.argv) > 1 and sys.argv[1] == "2") else False
+
 moves = [s.rstrip() for s in open("test.txt" if test else "real.txt", "r").readlines()]
 
 p = 50
@@ -21,10 +23,12 @@ for move in moves:
         else:
             p += dir
 
-        if p == 0:
+        if part2 and p == 0:
             ans += 1
 
     print(p)
+    if not part2 and p == 0:
+        ans += 1
 
 print("-" * 10)
 print(ans)
