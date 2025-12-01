@@ -11,17 +11,20 @@ ans = 0
 
 for move in moves:
     dir = -1 if move[0] == "L" else 1
-    m = dir * int(move[1:])
-    p = p + m
+    m = int(move[1:])
 
-    if p < 0:
-        p = (base - abs(p)) % base
-    elif p >= base: 
-        p = abs(p) % base
+    for i in range (0, m):
+        if p == 99 and dir == 1:
+            p = 0
+        elif p == 0 and dir == -1:
+            p = 99
+        else:
+            p += dir
+
+        if p == 0:
+            ans += 1
 
     print(p)
-    if p == 0:
-        ans += 1
 
 print("-" * 10)
 print(ans)
