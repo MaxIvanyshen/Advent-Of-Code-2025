@@ -8,21 +8,14 @@ def parse_input(filename):
 def stupidity(n):
     sj = str(n)
     l = len(sj)
-    e = 0
-    while e != len(sj):
-        e += 1 # increase for the next step
-        if l % e != 0 or l == e:
+    for e in range(1, l // 2 + 1):
+        if l % e != 0:
             continue
         sub = sj[:e]
-        count = 1
-        for k in range(e, l, e):
-            x = sj[k:k+e]
-            if x == sub:
-                count += 1
-        if count * e == l:
+        count = l // e
+        if sub * count == sj:
             return count
     return -1
-
 
 def solve(data, part=1):
     p1, p2 = 0, 0
