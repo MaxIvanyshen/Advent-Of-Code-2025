@@ -6,21 +6,18 @@ def parse_input(filename):
         return f.read().strip()
 
 def solve(data, part=1):
-    max_n = 2 if part == 1 else 12
+    max_n = 2 if part == 1 else 12 # 2 for part 1, 12 for part 2
     ans = 0
     for line in data.splitlines():
         l = len(line)
-        old_l = l
         while l != max_n:
-            for i in range(l-1):
-                if i + 1 < l and line[i] < line[i+1]:
+            for i in range(l + 1):
+                if i + 1 < l and line[i] < line[i+1]: # if the current digit is lower than the next one - remove it 
                     line = line[:i] + line[i+1:]
-                    l = len(line)
                     break
-            if old_l == l:
-                line = line[:l-1]
-                l -= 1
-            old_l = l
+                elif i == l: # if reached the end - remove the last digit
+                    line = line[:l-1]
+            l -= 1
         ans += int(line)
     return ans
 
