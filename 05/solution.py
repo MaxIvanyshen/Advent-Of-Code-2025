@@ -5,12 +5,7 @@ def parse_input(filename):
     with open(filename) as f:
         return f.read().strip()
 
-def merge_ranges(ranges):
-    int_ranges = []
-    for r in ranges:
-        s, e = r.split("-")
-        int_ranges.append((int(s), int(e)))
-
+def merge_ranges(int_ranges):
     int_ranges.sort()
 
     i = 0
@@ -27,26 +22,24 @@ def merge_ranges(ranges):
 
 def solve(data, part=1):
     ranges, fruits = [x.splitlines() for x in data.split("\n\n")]
-    if part == 1:
-        rs = set()
-        for r in ranges:
-            s, e = r.split("-")
-            rs.add((int(s), int(e)))
+    rs = []
+    for r in ranges:
+        s, e = r.split("-")
+        rs.append((int(s), int(e)))
 
-        ans = 0
+    ans = 0
+    if part == 1:
         for c in fruits:
             f = int(c)
-            exist = False
             for r in rs:
                 if f >= r[0] and f <= r[1]:
-                    exist = True
-            ans += 1 if exist else 0
-        return ans
+                    ans += 1
+                    break
     else:
-        ans = 0
-        for r in merge_ranges(ranges):
+        for r in merge_ranges(rs):
             ans += (r[1] - r[0] + 1)
-        return ans
+
+    return ans
 
 if __name__ == "__main__":
     input_type = sys.argv[1] if len(sys.argv) > 1 else "sample"
