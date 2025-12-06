@@ -6,15 +6,33 @@ def parse_input(filename):
         return f.read().strip()
 
 def solve(data, part=1):
-    eq = [[x for x in line.split()] for line in data.splitlines()] # matrix of equations (column is an equation)
-    ops = eq[-1]
+    eq = [line for line in data.splitlines()]
+    ops = eq[-1].split()
     ans = [0 if op == "+" else 1 for op in ops]
-    for j in range(len(eq[0])):
-        for i in range(len(eq)-1):
-            if ops[j] == "+":
-                ans[j] += int(eq[i][j])
+
+    if part == 1:
+        eq = [[x for x in line.split()] for line in eq]
+        ops = eq[-1]
+        for j in range(len(eq[0])):
+            for i in range(len(eq)-1):
+                if ops[j] == "+":
+                    ans[j] += int(eq[i][j])
+                else:
+                    ans[j] *= int(eq[i][j])
+    else:
+        eq = list(zip(*eq[:-1]))
+        op_idx = 0
+        for i in range(len(eq)):
+            s = "".join(eq[i])
+            if s.strip() == "":
+                i += 1
+                op_idx += 1
+                continue
+            if ops[op_idx] == "+":
+                ans[op_idx] += int(s)
             else:
-                ans[j] *= int(eq[i][j])
+                ans[op_idx] *= int(s)
+
     return sum(ans)
 
 if __name__ == "__main__":
