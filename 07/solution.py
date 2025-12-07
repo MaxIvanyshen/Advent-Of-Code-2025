@@ -5,15 +5,30 @@ def parse_input(filename):
     with open(filename) as f:
         return f.read().strip()
 
-def solve(data, part=1):
-    grid = [[c for c in line] for line in data.splitlines()]
-    s_idx = -1
-    for i in range(len(grid[0])):
-        if grid[0][i] == "S":
-            s_idx = i
+def backtrack(grid, r, c, cache):
+    for i in range(r, len(grid)):
+        if grid[i][c] == "^":
+            l, r = 0, 0
 
+            if (i+1, c-1) in cache:
+                l = cache[i+1, c-1]
+            else:
+                l = backtrack(grid, i + 1, c - 1, cache)
+                cache[i+1, c-1] = l
+
+            if (i+1, c+1) in cache:
+                r = cache[i+1, c+1]
+            else:
+                r = backtrack(grid, i + 1, c + 1, cache)
+                cache[i+1, c+1] = r
+
+            return l + r
+
+    return 1
+
+def watch_in_parallel(grid, start_idx):
     ans = 0
-    beams = {s_idx}
+    beams = {start_idx}
     for i in range(1, len(grid)):
         new_beams = set()
         delete = set()
@@ -24,8 +39,21 @@ def solve(data, part=1):
                 new_beams.add(b - 1)
                 new_beams.add(b + 1)
         beams = (beams - delete) | new_beams
-
     return ans
+
+def solve(data, part=1):
+    grid = [[c for c in line] for line in data.splitlines()]
+    s_idx = -1
+    for i in range(len(grid[0])):
+        if grid[0][i] == "S":
+            s_idx = i
+
+    if part == 1:
+        return watch_in_parallel(grid, s_idx)
+    else:
+        cache = dict()
+        return backtrack(grid, 1, s_idx, cache)
+
 
 if __name__ == "__main__":
     input_type = sys.argv[1] if len(sys.argv) > 1 else "sample"
